@@ -1,5 +1,3 @@
-from typing import Type
-
 
 class Product:
     def __init__(self, name=str, price=float, quantity=int):
@@ -32,7 +30,7 @@ class Product:
         self.active = False
 
     def show(self) -> str:
-        return f"{self.name}, price: {self.price}, quantity: {self._quantity}"
+        print(f"{self.name}, price: {self.price}, quantity: {self._quantity}")
 
     def buy(self, quantity: int) -> float:
         # parameter representing how many units of the product the user wants to buy
