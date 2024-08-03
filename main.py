@@ -1,8 +1,12 @@
-from store import *
-from products import *
+from typing import List, Tuple
+from store import Store
+from products import Product
 
 
 def display_menu():
+    """
+        Displays the main menu options for the store.
+    """
     print()
     print("Store Menu")
     print("----------")
@@ -12,9 +16,14 @@ def display_menu():
     print("4. Quit")
 
 
-def list_all_products(store: Store):    # pass the Store object to interact with its methods.
+def list_all_products(store: Store):
+    """
+        Lists all active products in the store.
+    """
+    # pass the Store object to interact with its methods.
     # The store parameter should be an instance of the Store class.
-    products = store.get_all_products()     # Retrieve Products: Use store method to get a list of active products.
+    products = store.get_all_products()
+    # Retrieve Products: Use store method to get a list of active products.
     if not products:    # If there are no active products:
         print("no products available.")
         return  # immediately exits the function, if there are no products to list
@@ -25,11 +34,22 @@ def list_all_products(store: Store):    # pass the Store object to interact with
 
 
 def show_total_amount(store: Store):
+    """
+        Shows the total quantity of all products in the store.
+    """
     total_quantity = store.get_total_quantity()
     print(f"Total of {total_quantity} items in store.")
 
 
 def make_order(store: Store):
+    """
+       Prompts the user to make an order by selecting products and specifying quantities.
+       Args:
+           store (Store): The store instance containing the products.
+       Raises:
+           ValueError: If the input for product number or amount is not a valid integer.
+           Exception: If the product is not found in the store.
+    """
     print("When you want to finish order, enter empty text.")
     shopping_list: List[Tuple[Product, int]] = []
     products = store.get_all_products()
@@ -61,11 +81,14 @@ def make_order(store: Store):
         total_order = store.order(shopping_list)
         print("********")
         print(f"Order accepted! Total payment: ${total_order}")
-    except Exception as e:
-        print(str(e))
+    except Exception as general_exception:
+        print(str(general_exception))
 
 
 def start(store: Store):
+    """
+        Starts the store application, displaying the menu and processing user input.
+    """
     while True:
         display_menu()
         enter_choice = input("Please choose a number (1-4): ")
