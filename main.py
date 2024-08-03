@@ -81,6 +81,8 @@ def make_order(store: Store):
         total_order = store.order(shopping_list)
         print("********")
         print(f"Order accepted! Total payment: ${total_order}")
+    except ValueError as value_error:
+        print(str(value_error))
     except Exception as general_exception:
         print(str(general_exception))
 

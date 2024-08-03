@@ -28,10 +28,10 @@ class Store:
             Remove a product from the store.
         """
         for store_product in self.products:
-            if store_product == product:  # Check if the current product (p) is the one to be removed.
+            if store_product == product:  # Check if the current product is the one to be removed.
                 self.products.remove(store_product)
                 break
-                # Exit the loop after removing the product to avoid modifying the list while iterating
+                # Exit the loop after removing product to avoid modifying the list while iterating
 
     def get_total_quantity(self) -> int:
         """
@@ -64,7 +64,7 @@ class Store:
             shopping_list (List[Tuple[Product, int]]):
             A list of tuples, where each tuple contains a Product object and the quantity to buy.
         Returns:
-            float: The total cost of purchasing all the specified products in the quantities provided.
+            float: Total cost of purchasing all the specified products in the quantities provided.
         Raises:
             Exception: If a product in the shopping list is not found in the store.
         """
