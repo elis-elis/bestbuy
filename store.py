@@ -1,4 +1,11 @@
-from products import *
+"""
+Store Class:
+Contains a list of Product instances.
+Methods to add, remove, find, and show products.
+Demonstrates class composition by including Product instances within the Store class.
+"""
+
+from products import Product
 from typing import List, Tuple
 
 
@@ -30,6 +37,7 @@ class Store:
             if product.is_active():
                 active_products.append(product)
         return active_products
+    # or like this: return [product for product in self.products if product.is_active()]
 
     def order(self, shopping_list: List[Tuple[Product, int]]) -> float:
         # allows you to purchase multiple products at once and calculates the total cost of the order.
