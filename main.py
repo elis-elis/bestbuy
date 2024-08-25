@@ -1,6 +1,6 @@
 from typing import List, Tuple
 from store import Store
-from products import Product
+from products import Product, NonStockedProduct, LimitedProduct
 
 
 def display_menu():
@@ -24,7 +24,7 @@ def list_all_products(store: Store):
     # The store parameter should be an instance of the Store class.
     products = store.get_all_products()
     # Retrieve Products: Use store method to get a list of active products.
-    if not products:    # If there are no active products:
+    if not products:  # If there are no active products:
         print("no products available.")
         return  # immediately exits the function, if there are no products to list
     print("------")
@@ -113,11 +113,14 @@ def start(store: Store):
             break
 
 
+# setup initial stock of inventory
 product_list = [Product("MacBook Air M2", price=1450, quantity=100),
                 Product("Bose QuietComfort Earbuds", price=250, quantity=500),
-                Product("Google Pixel 7", price=500, quantity=250)]
+                Product("Google Pixel 7", price=500, quantity=250),
+                NonStockedProduct("Windows License", price=125),
+                LimitedProduct("Shipping", price=10, quantity=250, maximum=1)
+                ]
 best_buy = Store(product_list)
-
 
 if __name__ == "__main__":
     start(best_buy)  # Ensure you're passing the instance, not the class

@@ -6,6 +6,7 @@ class Product:
             price (float): The price of the product.
             quantity (int): The quantity of the product in stock.
     """
+
     def __init__(self, name: str, price: float, quantity: int):
         # The name, price, and quantity parameters annotate with their types,
         # not assigned default type values.
@@ -89,7 +90,7 @@ class Product:
         if not self.active:  # Ensures that the product is available for sale
             raise Exception("product is not active")
         if not self.active:
-            raise Exception("Product is not active.")
+            raise Exception("product is not active.")
         if quantity < 1:
             raise ValueError("quantity must be at least 1.")
         if quantity > self._quantity:
@@ -105,3 +106,79 @@ class Product:
         # Use the set_quantity method to update the stock and automatically deactivate the product if necessary
         #     self.set_quantity(self._quantity - quantity)
         return total_price
+
+
+class NonStockedProduct(Product):
+    def __init__(self, name: str, price: float):
+        """
+            Initialize a NonStockedProduct with name and price.
+            The quantity is always set to 0.
+        """
+        super().__init__(name, price, 0)  # Quantity is always 0 for non-stocked products.
+
+    def set_quantity(self, quantity: int):
+        """
+            Override set_quantity to prevent changing the quantity.
+        """
+        raise Exception("Cannot set quantity for NonStockedProduct.")
+
+    def buy(self, quantity: int) -> float:
+        """
+            Override buy method to allow purchasing any quantity,
+            since we don't track stock.
+        """
+        if not isinstance(quantity, int):
+            raise TypeError("quantity must me an integer.")
+        if quantity < 1:
+            raise ValueError("quantity must be at least 1.")
+        return self.price * quantity
+
+    def show(self) -> str:
+        """
+            Show the details of the NonStockedProduct.
+        """
+        return f"{self.name}, price: {self.price} (Non-stocked, unlimited availability)"
+
+
+class LimitedProduct(Product):
+    def __init__(self, name: str, price: float, quantity: int, maximum: int):
+        """
+            Initialize a LimitedProduct with name, price, and max_quantity.
+            Args:
+            name (str): The name of the product.
+            price (float): The price of the product.
+            quantity (int): The quantity of the product in stock.
+            maximum (int): The maximum quantity that can be purchased in a single order.
+        """
+        super().__init__(name, price, quantity)
+        if not isinstance(maximum, int):
+            raise TypeError("Maximum quantity must be integer")
+        if maximum < 1:
+            raise ValueError("Maximum quantity must be at least 1.")
+
+        self.max_quantity = maximum     # Set the maximum purchase limit
+
+    def buy(self, quantity) -> float:
+        # The method is expected to return a float, which will be the total price of the purchase.
+        """
+            Override buy method to limit the purchase quantity.
+        """
+        if not isinstance(quantity, int):
+            raise TypeError("quantity must me an integer.")
+        if quantity < 1:
+            raise ValueError("quantity must be at least 1.")
+        if quantity > self.max_quantity:
+            # This checks if the quantity requested is greater than the allowed max_quantity for this product.
+            raise ValueError(f" cannot buy more than {self.max_quantity} units of this product.")
+
+        return super().buy(quantity)
+        # super().buy(quantity) is called, which runs the buy method in Product.
+        # The Product class's buy method subtracts the quantity from the stock,
+        # calculates the total price, and returns it. This result (the total price) is then
+        # returned by the buy method of LimitedProduct as well.
+
+    def show(self) -> str:
+        """
+        Show the details of the LimitedProduct.
+        """
+        return f"{self.name}, price: {self.price}, quantity: {self._quantity} max per order: {self.max_quantity}"
