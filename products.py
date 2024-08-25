@@ -9,6 +9,8 @@ class Product:
     def __init__(self, name: str, price: float, quantity: int):
         # The name, price, and quantity parameters annotate with their types,
         # not assigned default type values.
+        if not name:
+            raise ValueError("Product name cannot be empty.")
         if not isinstance(name, str):
             raise TypeError("Name must be a string.")
         if not isinstance(price, (int, float)):
