@@ -1,3 +1,7 @@
+from typing import Optional
+from promotion import Promotion
+
+
 class Product:
     """
         Initialize a Product instance.
@@ -27,6 +31,7 @@ class Product:
         self.price = price
         self._quantity = quantity  # Use a private variable to avoid conflict
         self.active = True
+        self.promotion: Optional[Promotion] = None
 
     def get_quantity(self) -> int:  # Getter method for quantity
         """
@@ -71,7 +76,20 @@ class Product:
             Returns:
                 str: A string representation of the product's details.
         """
-        return f"{self.name}, price: {self.price}, quantity: {self._quantity}"
+        if self.promotion:
+            promotion_info = f" (Promotion: {self.promotion.name})"
+        else:
+            promotion_info = ""
+        return f"{self.name}, price: {self.price}, quantity: {self._quantity}{promotion_info}"
+
+    def set_promotion(self, promotion: Promotion):
+        # promotion: Promotion: expects an object of the Promotion class (or any subclass of Promotion).
+        # It represents the promotion that we want to apply to the product.
+        self.promotion = promotion
+        # this method "attaches" a specific promotion to the product.
+
+    def remove_promotion(self):
+        self.promotion = None
 
     def buy(self, quantity) -> float:
         """
@@ -97,9 +115,14 @@ class Product:
             # Ensures that there is enough stock to fulfill the purchase request.
             raise Exception("not enough quantity in stock.")
 
-        self._quantity -= quantity  # Updates the stock
-        total_price = self.price * quantity
+        if self.promotion:
+            # Calculate the price using the promotion
+            total_price = self.promotion.apply_promotion(self, quantity)
+        else:
+            # Regular price calculation
+            total_price = self.price * quantity
 
+        self._quantity -= quantity  # Updates the stock
         if self._quantity == 0:
             self.deactivate()
         # or this way:
